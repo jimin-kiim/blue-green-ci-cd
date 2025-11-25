@@ -1,6 +1,6 @@
 services:
   express-healthcheck-blue:
-    image: ${{ secrets.DOCKER_USERNAME }}/express-healthcheck:latest
+    image: ${DOCKER_USERNAME}/express-healthcheck:latest
     container_name: express-healthcheck-blue
     restart: always
     ports:
@@ -8,18 +8,18 @@ services:
     networks:
       - backend-proxy
 
-    express-healthcheck-green:
-      image: ${{ secrets.DOCKER_USERNAME }}/express-healthcheck:latest
-      container_name:express-healthcheck-green
+  express-healthcheck-green:
+      image: ${DOCKER_USERNAME}/express-healthcheck:latest
+      container_name: express-healthcheck-green
       restart: always
       ports:
         - "3002:3000"
       networks:
         - backend-proxy
    
-    nginx-proxy:
+  nginx-proxy:
       image: nginx:stable-alpine
-      container_name:nginx_proxy
+      container_name: nginx_proxy
       restart: always
       ports:
         - "80:80"
@@ -30,5 +30,5 @@ services:
         - backend-proxy
 
 networks:
-  backend-deploy:
+  backend-proxy:
     external: true
