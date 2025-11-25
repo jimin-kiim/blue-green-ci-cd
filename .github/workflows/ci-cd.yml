@@ -1,5 +1,4 @@
 name: Express Blue/Green CI/CD
-
 on: 
   push: 
     branches:
@@ -22,6 +21,9 @@ jobs:
   deploy: 
     needs: build-and-push
     runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
     steps:
       - name: Set up SSH
         run: |
