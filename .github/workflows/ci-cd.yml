@@ -33,7 +33,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} 'bash -s' <<EOF
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "DOCKER_USERNAME=$DOCKER_USERNAME sudo -E bash -s" <<EOF
           set -e
           cd /home/${{ secrets.SERVER_USER }}/bluegreen
 
@@ -49,8 +49,8 @@ jobs:
           fi
 
           echo "Deploying to: \$TARGET"
-            docker compose pull express-healthcheck-\$TARGET
-            docker compose up -d express-healthcheck-\$TARGET
+            sudo DOCKER_USERNAME="$DOCKER_USERNAME" docker compose pull express-healthcheck-\$TARGET
+            sudo DOCKER_USERNAME="$DOCKER_USERNAME" docker compose up -d express-healthcheck-\$TARGET
 
           if [ "\$STOP" != "none" ]; then
             echo "Running health check..."
